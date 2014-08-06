@@ -1,0 +1,32 @@
+<html>
+<head>
+  <title>Hull Components - login - version: fe6fea7b98e94034a0b7db1df1bfe3d57d8ea95d</title>
+  <link href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet">
+  <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+  <script src="https://s3.amazonaws.com/hull-js/0.8/hull.debug.js"></script>
+  <script>
+	  var cfg = {"appId":"516d68fc28e06bb7b8000040","orgUrl":"https://hull-demos.hullapp.io","jsUrl":"https://s3.amazonaws.com/hull-js","debug":false,"sources":{"default":"."}};
+	  Hull.init(cfg);
+    Hull.startLogin = function($el, options) {
+      var $root = $('#hull-root');
+      if ($root.length == 0) {
+        $root = $("<div/>").attr('id', 'hull-root');
+        $('body').append($root);
+      }
+      $component = $("<div/>").attr('data-hull-component', 'login');
+      $el = $el || $root;
+      $el.html($component);
+      Hull.parse($el);
+    }
+    Hull.ready(function() {
+      setTimeout(function() {
+        // Hull.startLogin();
+      }, 2000);
+    });
+	</script>
+</head>
+<body>
+  <div data-hull-component="login" style="width:350px">Loading...</div>
+</body>
+</html>
