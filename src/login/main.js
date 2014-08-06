@@ -5,7 +5,7 @@ Hull.component({
 
   datasources: {
     ship: function() {
-      return this.ship || $.getJSON('/ship.json');
+      return this.ship || $.getJSON('ship.json');
     },
     validationStatus: function() {
       return this.loggedIn() && this.api('me/validation_status');
