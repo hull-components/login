@@ -1,6 +1,6 @@
 {
   "name": "login",
-  "version": "fe6fea7b98e94034a0b7db1df1bfe3d57d8ea95d",
+  "version": "bc0af89ee1c1d902cf5c265821dea1555b7fc476",
   "files": {
     "templates": [
       "profile-form.hbs",
@@ -16,5 +16,5 @@
       "main.js"
     ]
   },
-  "buildDate": "2014-08-06T11:40:21.404Z"
+  "buildDate": "2014-08-06T11:42:54.715Z"
 }
