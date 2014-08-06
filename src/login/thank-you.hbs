@@ -1,0 +1,32 @@
+{{> login/styles}}
+
+<div class="login-header">
+  <img class="brand-logo" src="{{ship.appearance.logo}}" alt="Logo" />
+  <h1 class="text-center">{{t 'thank_you_title'}} {{me.name}}</h1>
+</div>
+
+
+{{#if ship.settings.social.enabled}}
+<div class="social-login">
+  {{#each authServices}}
+  {{#if linked}}
+    <button data-hull-action="unlinkIdentity" data-hull-provider="{{@key}}" class="btn btn-block social-btn social-btn-{{@key}}">
+      <i class="fa fa-{{.}}"></i>
+      &nbsp;
+      {{t "Unlink"}} {{humanize @key}}
+    </button>
+  {{else}}
+    <button data-hull-action="linkIdentity" data-hull-provider="{{@key}}" class="btn btn-block social-btn social-btn-{{@key}}">
+      <i class="fa fa-{{.}}"></i>
+      &nbsp;
+      {{t "Link"}} {{humanize @key}}
+    </button>
+  {{/if}}
+  {{/each}}
+</div>
+{{/if}}
+
+
+<div class="login-footer text-center">
+ <a href="#" data-hull-action="logout">{{t "Log out"}}</a>
+</div>

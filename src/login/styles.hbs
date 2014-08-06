@@ -1,0 +1,175 @@
+<style>
+{{styleNamespace}} {
+  padding: 20px 10px;
+  font-weight: 200;
+  color: #bdbdbd;
+  font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+}
+
+{{styleNamespace}} .text-center {
+  text-align: center;
+}
+
+{{styleNamespace}} .btn {
+  display: inline-block;
+  margin-bottom: 0;
+  font-weight: 400;
+  text-align: center;
+  vertical-align: middle;
+  cursor: pointer;
+  background-image: none;
+  border: 1px solid transparent;
+  white-space: nowrap;
+  padding: 6px 12px;
+  font-size: 14px;
+  line-height: 1.42857143;
+  border-radius: 4px;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+{{styleNamespace}} .btn-block {
+  display: block;
+  width: 100%;
+  padding-left: 0;
+  padding-right: 0;
+}
+
+
+{{styleNamespace}} .btn-primary {
+  color: #ffffff;
+  background: {{ship.appearance.main_color}};
+  border-color: {{ship.appearance.main_color}};
+}
+
+{{styleNamespace}} a {
+  text-decoration: underline;
+  color: #bfbfbf;
+}
+
+/*--------------------
+  login-header
+*/
+
+{{styleNamespace}} .login-header {
+  margin: 20px auto;
+}
+
+{{styleNamespace}} .login-header .brand-logo {
+    {{#if ship.appearance.logo_circle}}border-radius: 50%;{{/if}}
+    margin: 10px auto 10px;
+    display: block;
+    height: 100px;
+}
+
+{{styleNamespace}} .login-header h1 {
+  font-size: 26px;
+  font-weight: 100;
+  color: {{ship.appearance.main_color}};
+}
+
+/*--------------------
+  social-login
+*/
+
+{{styleNamespace}} .social-login {
+  margin: 20px 0;
+}
+
+{{styleNamespace}} .social-login > div {
+  margin: 10px 0;
+}
+
+{{styleNamespace}} .social-login button {
+  color: #ffffff;
+}
+
+{{styleNamespace}} .social-login button.social-btn-facebook {
+  background-color: #3B5998;
+}
+
+{{styleNamespace}} .social-login button.social-btn-twitter {
+  background-color: #4099FF;
+}
+
+
+
+/*--------------------
+  or-separator
+*/
+
+{{styleNamespace}} .or-separator {
+  text-align: center;
+  overflow: hidden;
+  padding: 10px 0 20px
+}
+
+{{styleNamespace}} .or-separator span {
+  background-color: white;
+  font-size: 10px;
+  color: #E0E0E0;
+  display: inline-block;
+  text-transform: uppercase;
+  position: relative;
+  padding: 0 10px;
+  letter-spacing: 3px;
+  font-weight: 100;
+}
+
+{{styleNamespace}} .or-separator span:before,.or-separator span:after {
+  position: absolute;
+  content: "";
+  left: 100%;
+  top: 50%;
+  width: 1000px;
+  background: #EBEBEB;
+  height: 1px
+}
+
+{{styleNamespace}} .or-separator span:before {
+  left: auto;
+  right: 100%
+}
+
+{{styleNamespace}} form input {
+  border: 0;
+}
+
+
+{{styleNamespace}} form input:focus { outline: 0; border: 0; box-shadow: none; }
+{{styleNamespace}} form input::-webkit-input-placeholder { color:#dedede; }
+{{styleNamespace}} form input::-moz-placeholder { color:#dedede; } /* firefox 19+ */
+{{styleNamespace}} form input:-ms-input-placeholder { color:#dedede; } /* ie */
+{{styleNamespace}} form input:-moz-placeholder { color:#dedede; }
+
+
+{{styleNamespace}} .signup-form {
+  margin: 5px 0;
+}
+
+{{styleNamespace}} .list-group-item {
+  padding: 0;
+}
+
+{{styleNamespace}} .accept-marketing {
+  padding: 7px 10px;
+  background: #fafafa;
+}
+
+{{styleNamespace}} .accept-marketing label {
+  font-weight: 200;
+  padding: 0 10px;
+  margin: 0;
+}
+
+/*--------------------
+  login-footer
+*/
+
+{{styleNamespace}} .login-footer {
+  margin: 20px auto;
+}
+
+</style>

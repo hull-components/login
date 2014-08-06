@@ -1,0 +1,22 @@
+{{> login/styles}}
+
+<div class="login-header">
+  <img class="brand-logo" src="{{ship.appearance.logo}}" alt="Logo" />
+  <h1 class="text-center">{{t 'Please fill out your profile'}}</h1>
+  <p class="text-center"><a href="#" data-hull-action="renderSection" data-hull-section="thank-you">{{t "I will complete it later"}}</a></p>
+</div>
+
+<form class="signup-form" data-action="profile">
+  <ul class="list-group">
+    {{#each ship.settings.profile.schema.properties}}
+    <li class="list-group-item">
+      <input type="{{type}}" name="{{.}}" class="form-control" placeholder="{{description}}" required>
+    </li>
+    {{/each}}
+  </ul>
+
+  <button class="btn btn-block btn-primary" type="submit">
+    {{t "Save my profile"}}
+  </button>
+
+</form>
