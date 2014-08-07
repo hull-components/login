@@ -24,13 +24,13 @@ Hull.component({
     I18n.locale = this.options.locale || navigator.language;
     var self = this;
     this.sandbox.on('hull.auth.login', function() {
-      self.render('profile-form');
+      self.renderSection('profile-form');
     });
     this.sandbox.on('hull.auth.fail', function(error) {
       self.alertMessage("Oops, login failed: " + (error.message || error.reason));
     });
     this.sandbox.on('hull.auth.logout', function(error) {
-      self.render('sign-up');
+      self.renderSection('sign-up');
     });
     var _ = this.sandbox.util._;
     if (this.options.section && _.include(this.templates, this.options.section)) {
@@ -63,7 +63,7 @@ Hull.component({
       var email = formData.email;
       if (this.isValidEmail(email)) {
         this.requestEmail(email, 'request_password_reset').then(function() {
-          self.render('sign-in');
+          self.renderSection('sign-in');
         });
       }
     },

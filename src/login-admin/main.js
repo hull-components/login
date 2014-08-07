@@ -17,7 +17,8 @@ Hull.component({
   },
 
   afterRender: function(data) {
-    var self = this;
+    var self = this,
+      _ = this.sandbox.util._;
     var editor = new JSONEditor(document.getElementById(data.editorId), {
       ajax: true,
       schema: data.schema,
@@ -31,7 +32,7 @@ Hull.component({
 
     editor.on('ready', function() {});
 
-    editor.on('change', function() {
+    var onChange = _.debounce(function() {
       var ship = self.ship = editor.getValue();
       var errors = editor.validate();
       if (errors.length == 0) {
@@ -40,7 +41,9 @@ Hull.component({
       } else {
         console.error('Validation Errors', errors);
       }
-    });
+    }, 100);
+
+    editor.on('change', onChange);
 
     this.editor = editor;
   }
