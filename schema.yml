@@ -141,9 +141,11 @@ definitions:
           - "facebook"
           - "twitter"
       signup:
+        title: "Signup"
         type: "object"
         properties:
           form:
+            title: "Signup form"
             description: "Fields displayed in signup form"
             $ref: "#/definitions/user-form-schema"
             format: "array"
@@ -179,6 +181,11 @@ definitions:
         title: "Main color"
         description: "Main color used for the titles and buttons."
         $ref: "#/definitions/color"
+      show_social_icons:
+        title: "Show Social Icons"
+        description: "Show / Hide social network's icons in login buttons."
+        type: boolean
+        default: true
   translations:
     type: "object"
     properties:

@@ -15,7 +15,7 @@
 <div class="social-login">
   {{#each authServices}}
   <button data-hull-action="login" data-hull-provider="{{@key}}" class="btn btn-block social-btn social-btn-{{@key}}">
-    <i class="fa fa-{{@key}}"></i>
+    {{#if ../ship.appearance.show_social_icons}}<i class="fa fa-{{@key}}"></i>{{/if}}
     &nbsp;
     {{t "Log in with"}} {{humanize @key}}
   </button>

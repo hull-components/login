@@ -1,6 +1,6 @@
 Hull.component({
 
-  templates: ['sign-up', 'sign-in', 'profile-form', 'recover-password', 'thank-you', 'styles'],
+  templates: ['sign-up', 'sign-in', 'profile-form', 'recover-password', 'profile', 'styles'],
   require: ['i18n'],
 
   datasources: {
@@ -16,7 +16,7 @@ Hull.component({
     if (this.options.editMode) {
       this.sandbox.on('ship.update', function(ship) {
         this.ship = ship;
-        this.render();
+        this.renderSection();
       }, this);
     }
     this.$el.attr('id', this.cid);
@@ -36,13 +36,16 @@ Hull.component({
     if (this.options.section && _.include(this.templates, this.options.section)) {
       this.template = this.options.section;
     }
+    if (this.loggedIn()) {
+      this.template = "profile";
+    }
   },
 
   events: {
 
-    'keyup input[type="email"]': function(e) {
+    'keyup input[name="email"]': function(e) {
       var val = $(e.target).val();
-      if (this.isEmail(val)) {
+      if (this.isValidEmail(val)) {
         this.currentEmail = val;
       }
     },
@@ -58,7 +61,7 @@ Hull.component({
       var self = this,
         formData = this.sandbox.dom.getFormData(e.target);
       var email = formData.email;
-      if (this.isEmail(email)) {
+      if (this.isValidEmail(email)) {
         this.requestEmail(email, 'request_password_reset').then(function() {
           self.render('sign-in');
         });
@@ -73,7 +76,7 @@ Hull.component({
       var self = this;
       this.alertMessage(false);
       var loginData = this.sandbox.dom.getFormData(e.target);
-      if (this.isEmail(loginData.login)) {
+      if (this.isValidEmail(loginData.login)) {
         this.currentEmail = loginData.login;
       }
       if (loginData.login && loginData.password) {
@@ -86,13 +89,13 @@ Hull.component({
     if (msg) alert(msg);
   },
 
-  isEmail: function(str) {
+  isValidEmail: function(str) {
     return /^\S+@\S+\.\S+$/i.test(str);
   },
 
   requestEmail: function(email, type) {
     var self = this;
-    if (this.isEmail(email)) {
+    if (this.isValidEmail(email)) {
       var dfd = this.api('users/' + type, 'post', {
         email: email
       })
@@ -113,12 +116,17 @@ Hull.component({
   actions: {
     setLocale: function(event, action) {
       I18n.locale = action.data.locale;
-      this.render();
+      this.renderSection();
     },
 
     renderSection: function(event, action) {
-      this.render(action.data.section);
+      this.renderSection(action.data.section);
     }
+  },
+
+  renderSection: function(section) {
+    this.currentSection = section || this.currentSection || this.getTemplate();
+    this.render(this.currentSection);
   },
 
   helpers: {
@@ -142,5 +150,11 @@ Hull.component({
         linked: loggedIn && loggedIn[provider]
       };
     });
+  },
+
+  afterRender: function() {
+    if (this._renderCount > 1) {
+      this.$('form input[name="email"], form input[name="login"]').focus();
+    }
   }
 });
