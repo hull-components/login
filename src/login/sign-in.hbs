@@ -1,9 +1,11 @@
 {{> login/styles}}
 
 <div class="login-header">
-  <img class="brand-logo" src="{{ship.appearance.logo_url}}" alt="Logo" />
-  <h1 class="text-center">{{t 'signin_title'}}</h1>
-  <p class="text-center">
+  {{#if ship.appearance.logo_url}}
+    <img class="brand-logo" src="{{ship.appearance.logo_url}}" alt="Logo" />
+  {{/if}}
+  <h1 class="login-header-title">{{t 'signin_title'}}</h1>
+  <p class="login-header-subtitle">
     {{t "Don't have an account?"}}
     <a href="#" data-hull-action="renderSection" data-hull-section="sign-up">{{t "Sign up"}}</a>
   </p>
@@ -40,6 +42,9 @@
 
 </form>
 
-<div class="login-footer text-center">
- <a href="#" data-hull-action="renderSection" data-hull-section="recover-password">{{t "Forgot your password?"}}</a>
+<div class="login-footer">
+  <p>
+    <a href="#" data-hull-action="renderSection" data-hull-section="recover-password">{{t "Forgot your password?"}}</a>
+  </p>
 </div>
+

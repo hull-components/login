@@ -1,9 +1,24 @@
 <style>
+
+body {
+  background: red;
+}
+
 {{styleNamespace}} {
-  padding: 20px 10px;
-  font-weight: 200;
+  margin: 30px;
+  border-radius: 6px;
+  box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.15);
+  padding: 30px;
   color: #bdbdbd;
-  font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+  background: #fff;
+}
+
+{{styleNamespace}},
+{{styleNamespace}} input,
+{{styleNamespace}} button,
+{{styleNamespace}} textarea {
+  font: 14px/1.5 "Helvetica Neue", Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
 }
 
 {{styleNamespace}} .text-center {
@@ -13,21 +28,24 @@
 {{styleNamespace}} .btn {
   display: inline-block;
   margin-bottom: 0;
-  font-weight: 400;
+  font-weight: bold;
   text-align: center;
   vertical-align: middle;
   cursor: pointer;
   background-image: none;
-  border: 1px solid transparent;
   white-space: nowrap;
-  padding: 6px 12px;
+  padding: 8px 13px;
   font-size: 14px;
   line-height: 1.42857143;
-  border-radius: 4px;
+  border-radius: 3px;
   -webkit-user-select: none;
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
+  text-shadow: 0px -1px 0px rgba(0,0,0,0.10);
+  border: 0;
+  background-image: linear-gradient(180deg, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0) 100%);
+  box-shadow: inset 0px -1px 0px 0px rgba(0,0,0,0.05);
 }
 
 {{styleNamespace}} .btn-block {
@@ -37,11 +55,14 @@
   padding-right: 0;
 }
 
+{{styleNamespace}} .btn-block + .btn-block {
+  margin-top: 10px;
+}
+
 
 {{styleNamespace}} .btn-primary {
   color: #ffffff;
-  background: {{ship.appearance.main_color}};
-  border-color: {{ship.appearance.main_color}};
+  background-color: {{ship.appearance.main_color}};
 }
 
 {{styleNamespace}} a {
@@ -54,29 +75,34 @@
 */
 
 {{styleNamespace}} .login-header {
-  margin: 20px auto;
+  margin: 0 auto 30px;
+  text-align: center;
+}
+
+{{styleNamespace}} .login-header-title {
+  margin: -5px 0 7px 0
+}
+
+{{styleNamespace}} .login-header-subtitle {
+  margin: 0 0 -6px 0;
 }
 
 {{styleNamespace}} .login-header .brand-logo {
-    {{#if ship.appearance.logo_circle}}border-radius: 50%;{{/if}}
-    margin: 10px auto 10px;
-    display: block;
-    height: 100px;
+  {{#if ship.appearance.logo_circle}}border-radius: 50%;{{/if}}
+  margin: 10px auto 10px;
+  display: block;
+  height: 100px;
 }
 
 {{styleNamespace}} .login-header h1 {
-  font-size: 26px;
-  font-weight: 100;
+  font-size: 24px;
+  font-weight: 300;
   color: {{ship.appearance.main_color}};
 }
 
 /*--------------------
   social-login
 */
-
-{{styleNamespace}} .social-login {
-  margin: 20px 0;
-}
 
 {{styleNamespace}} .social-login > div {
   margin: 10px 0;
@@ -94,8 +120,6 @@
   background-color: #4099FF;
 }
 
-
-
 /*--------------------
   or-separator
 */
@@ -103,22 +127,22 @@
 {{styleNamespace}} .or-separator {
   text-align: center;
   overflow: hidden;
-  padding: 10px 0 20px
+  margin: 25px 0;
 }
 
 {{styleNamespace}} .or-separator span {
   background-color: white;
   font-size: 10px;
-  color: #E0E0E0;
+  line-height: 1;
   display: inline-block;
   text-transform: uppercase;
   position: relative;
   padding: 0 10px;
-  letter-spacing: 3px;
-  font-weight: 100;
+  letter-spacing: 1px;
 }
 
-{{styleNamespace}} .or-separator span:before,.or-separator span:after {
+{{styleNamespace}} .or-separator span:before,
+{{styleNamespace}} .or-separator span:after {
   position: absolute;
   content: "";
   left: 100%;
@@ -137,6 +161,13 @@
   border: 0;
 }
 
+{{styleNamespace}} .signup-form {
+  margin-bottom: 30px;
+}
+
+{{styleNamespace}} .signup-form-fields {
+  margin-bottom: 10px;
+}
 
 {{styleNamespace}} form input:focus { outline: 0; border: 0; box-shadow: none; }
 {{styleNamespace}} form input::-webkit-input-placeholder { color:#dedede; }
@@ -144,24 +175,18 @@
 {{styleNamespace}} form input:-ms-input-placeholder { color:#dedede; } /* ie */
 {{styleNamespace}} form input:-moz-placeholder { color:#dedede; }
 
-
-{{styleNamespace}} .signup-form {
-  margin: 5px 0;
-}
-
 {{styleNamespace}} .list-group-item {
   padding: 0;
 }
 
 {{styleNamespace}} .accept-marketing {
-  padding: 7px 10px;
+  padding: 6px 10px;
   background: #fafafa;
 }
 
 {{styleNamespace}} .accept-marketing label {
-  font-weight: 200;
-  padding: 0 10px;
   margin: 0;
+  font-weight: normal;
 }
 
 /*--------------------
@@ -169,7 +194,12 @@
 */
 
 {{styleNamespace}} .login-footer {
-  margin: 20px auto;
+  text-align: center;
+  margin: 0;
+}
+
+{{styleNamespace}} .login-footer p {
+  margin: 0 0 -6px 0;
 }
 
 </style>
