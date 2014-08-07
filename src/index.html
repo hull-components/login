@@ -3,30 +3,32 @@
   <title>Hull Components - {{options.sourceName}} - version: {{options.version}}</title>
   <link href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet">
   <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+
   <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-  <script src="{{config.init.jsUrl}}/{{config.version}}/hull.debug.js"></script>
+
+  <!--
+  <script src="//cdnjs.cloudflare.com/ajax/libs/select2/3.5.0/select2.min.js"></script>
+  <link href="//cdnjs.cloudflare.com/ajax/libs/select2/3.5.0/select2.min.css" rel="stylesheet">
+  -->
+
+  <script src="{{config.init.jsUrl}}/{{config.version}}/hull.js"></script>
   <script>
-	  var cfg = {{{initConfig}}};
-	  Hull.init(cfg);
-    Hull.startLogin = function($el, options) {
-      var $root = $('#hull-root');
-      if ($root.length == 0) {
-        $root = $("<div/>").attr('id', 'hull-root');
-        $('body').append($root);
-      }
-      $component = $("<div/>").attr('data-hull-component', 'login');
-      $el = $el || $root;
-      $el.html($component);
-      Hull.parse($el);
-    }
-    Hull.ready(function() {
-      setTimeout(function() {
-        // Hull.startLogin();
-      }, 2000);
-    });
+	  Hull.init({{{initConfig}}});
 	</script>
 </head>
 <body>
-  <div data-hull-component="login" style="width:350px">Loading...</div>
+  <div class="container">
+    <div class="row">
+      <div class="col-md-4">
+        <div style="position:fixed;">
+          <div data-hull-component="login" style="width: 350px;"></div>
+        </div>
+      </div>
+      <div class="col-md-8">
+        <div data-hull-component="login-admin"></div>
+      </div>
+    </div>
+  </div>
+
 </body>
 </html>

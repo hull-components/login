@@ -15,7 +15,7 @@ Hull.component({
   initialize: function() {
     this.$el.attr('id', this.cid);
     I18n.fallbacks = true;
-    I18n.locale = this.options.locale || 'en';
+    I18n.locale = this.options.locale || navigator.language;
     var self = this;
     this.sandbox.on('hull.auth.login', function() {
       self.render('profile-form');

@@ -1,0 +1,1 @@
+../../bower_components/json-editor/dist/jsoneditor.js

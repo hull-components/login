@@ -1,4 +1,4 @@
-module.exports = function (grunt) {
+module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-watch');
   grunt.loadNpmTasks('grunt-contrib-connect');
   grunt.loadNpmTasks('grunt-gh-pages');
@@ -23,7 +23,7 @@ module.exports = function (grunt) {
 
     watch: {
       components: {
-        files: ['src/**/**', 'config.yml'],
+        files: ['src/**/**', 'config.yml', 'schema.yml'],
         tasks: ['hull_components']
       }
     },

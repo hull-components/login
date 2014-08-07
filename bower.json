@@ -1,0 +1,26 @@
+{
+  "name": "hull-components/login",
+  "version": "0.0.1",
+  "authors": [
+    "Stephane Bellity <stephane@hull.io>"
+  ],
+  "description": "Login & Signup component for http://hull.io",
+  "keywords": [
+    "hull",
+    "component",
+    "social-login"
+  ],
+  "license": "MIT",
+  "homepage": "http://hull-components.github.io/login",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests",
+    "docs"
+  ],
+  "dependencies": {
+    "json-editor": "0.7.4"
+  }
+}

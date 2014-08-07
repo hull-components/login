@@ -1,0 +1,152 @@
+$schema: "http://hull-components/schema#"
+id: "http://hull-components.github.io/login/schema#"
+title: "Signup / Login component"
+description: "This is a packaged, embeddable and highly configurable component to sign users up or log them in to your apps."
+type: "object"
+definitions:
+  url:
+    type: "string"
+    format: "url"
+    pattern: ^(http|https):\/\/[\w-]+(\.[\w-]+)+([\w.,@?^=%&amp;:\/~+#-]*[\w@?^=%&amp;\/~+#-])?$
+  octet:
+    type: integer
+    minimum: 0
+    maximum: 255
+  color:
+    format: "color"
+    type: "string"
+    description: "hex color"
+    pattern: ^#([a-f]|[A-F]|[0-9]){3}(([a-f]|[A-F]|[0-9]){3})?$
+  email:
+    type: "string"
+    pattern: ^\S+@\S+\.\S+$
+    format: "email"
+  image-url:
+    type: "string"
+    format: "url"
+    pattern: ^https?:\/\/(?:[a-z\-]+\.)+[a-z]{2,6}(?:\/[^\/#?]+)+\.(?:jpe?g|gif|png)$
+  auth-provider:
+    type: "string"
+    enum:
+      - "facebook"
+      - "foursquare"
+      - "github"
+      - "google"
+      - "instagram"
+      - "linkedin"
+      - "twitter"
+  user-form-schema:
+    $schema: "http://json-schema.org/draft-04/schema#"
+    type: "object"
+    properties:
+      properties:
+        description: "Ordered list of fields."
+        type: "object"
+      required:
+        description: "List of required fields."
+        type: "array"
+        additionalItems: true
+        items:
+          - "string"
+      required:
+        - "properties"
+        - "required"
+  settings:
+    $schema: "http://json-schema.org/draft-04/schema#"
+    type: "object"
+    title: "Settings"
+    description: "General settings for the component"
+    properties:
+      general:
+        title: "General"
+        description: "General settings"
+        type: "object"
+        properties:
+          terms_of_service_url:
+            $ref: "#/definitions/url"
+            title: "Terms of service URL"
+            example: "http://hull.io/tos"
+          privacy_policy_url:
+            $ref: "#/definitions/url"
+            title: "Privacy policy URL"
+            example: "http://hull.io/pp"
+          accept_marketing:
+            type: "string"
+            title: "Accept marketing checkbox"
+            description: "Whether the user is asked for permission to receive marketing emails. default: 'checked'"
+            enum:
+              - "checked"
+              - "unchecked"
+              - "hidden"
+            default: "checked"
+            example: "checked"
+          redirect_url:
+            $ref: "#/definitions/url"
+            title: "Redirect URL"
+            description: "URL where the user is redirected to when the signup or login flow is complete."
+            example: "https://accounts.hullapp.io"
+        required:
+          - "accept_marketing"
+      social:
+        title: "Social login"
+        description: "Enable Social login and configure providers"
+        type: "object"
+        properties:
+          enabled:
+            type: "boolean"
+            description: "Enables or disables display of social login buttons."
+            default: true
+            example: true
+          providers:
+            type: "multiselect"
+            descripton: "Ordered list of authentication providers."
+            minItems: 0
+            maxItems: 3
+            uniqueItems: true
+            items:
+              title: "Auth Service"
+              $ref: "#/definitions/auth-provider"
+        required:
+          - "enabled"
+          - "providers"
+        default:
+          - "facebook"
+          - "twitter"
+      signup:
+        type: "object"
+        properties:
+          form:
+            description: "Fields displayed in signup form"
+            $ref: "#/definitions/user-form-schema"
+      profile:
+        type: "object"
+        properties:
+          form:
+            description: "Fields displayed in profile form"
+            $ref: "#/definitions/user-form-schema"
+  appearance:
+    $schema: "http://json-schema.org/draft-04/schema#"
+    type: "object"
+    title: "Appearance"
+    description: "Appearance related options for the component"
+    properties:
+      logo_url:
+        title: "Logo URL"
+        description: "Brand logo displayed in the header. Dimensions should not exceed 150px x 100px."
+        example: "https://dl.dropboxusercontent.com/u/264017/Hull/images/pahte-logo.png"
+        $ref: "#/definitions/image-url"
+      main_color:
+        title: "Main color"
+        description: "Main color used for the titles and buttons."
+        $ref: "#/definitions/color"
+properties:
+  settings:
+    $ref: "#/definitions/settings"
+  appearance:
+    $ref: "#/definitions/appearance"
+  locales:
+    $ref: "#/definitions/locales"
+required:
+  - settings
+  - appearance
+  - locales
