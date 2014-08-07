@@ -160,12 +160,31 @@ definitions:
                 inputType: "password"
                 title: "Password"
                 required: true
-  profile:
+      profile:
+        title: "Profile"
         type: "object"
         properties:
           form:
+            title: "Profile form"
             description: "Fields displayed in profile form"
             $ref: "#/definitions/user-form-schema"
+            format: "array"
+            default:
+              - name: "address"
+                type: "string"
+                inputType: "text"
+                title: "Address"
+                required: true
+              - name: "city"
+                type: "string"
+                inputType: "text"
+                title: "City"
+                required: true
+              - name: "zipcode"
+                type: "string"
+                inputType: "text"
+                title: "Zipcode"
+                required: true
   appearance:
     $schema: "http://json-schema.org/draft-04/schema#"
     type: "object"

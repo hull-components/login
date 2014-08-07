@@ -7,10 +7,11 @@
 </div>
 
 <form class="signup-form" data-action="profile">
+  <fieldset>
   <ul class="list-group">
-    {{#each ship.settings.profile.form.properties}}
+    {{#each profileFormFields}}
     <li class="list-group-item">
-      <input type="{{type}}" name="{{.}}" class="form-control" placeholder="{{description}}" required>
+      <input type="{{inputType}}" name="{{name}}" class="form-control" placeholder="{{title}}" value="{{value}}" {{#if required}}required{{/if}}>
     </li>
     {{/each}}
   </ul>
@@ -18,5 +19,5 @@
   <button class="btn btn-block btn-primary" type="submit">
     {{t "Save my profile"}}
   </button>
-
+  </fieldset>
 </form>
