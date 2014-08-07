@@ -3,14 +3,7 @@
   <title>Hull Components - {{options.sourceName}} - version: {{options.version}}</title>
   <link href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet">
   <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
-
   <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-
-  <!--
-  <script src="//cdnjs.cloudflare.com/ajax/libs/select2/3.5.0/select2.min.js"></script>
-  <link href="//cdnjs.cloudflare.com/ajax/libs/select2/3.5.0/select2.min.css" rel="stylesheet">
-  -->
-
   <script src="{{config.init.jsUrl}}/{{config.version}}/hull.js"></script>
   <script>
 	  Hull.init({{{initConfig}}});
@@ -21,7 +14,7 @@
     <div class="row">
       <div class="col-md-4">
         <div style="position:fixed;">
-          <div data-hull-component="login" style="width: 350px;"></div>
+          <div data-hull-component="login" data-hull-edit-mode="true" style="width: 350px;"></div>
         </div>
       </div>
       <div class="col-md-8">

@@ -28,17 +28,18 @@
 
 <form class="signup-form" data-action="signup">
   <ul class="list-group signup-form-fields">
-    {{#each ship.settings.signup.form.properties}}
+    {{#each ship.settings.signup.form}}
     <li class="list-group-item">
-      <input type="{{type}}" name="{{@key}}" class="form-control" placeholder="{{description}}" required>
+      <input type="{{inputType}}" name="{{name}}" class="form-control" placeholder="{{title}}" {{#if required}}required{{/if}}>
     </li>
     {{/each}}
-    {{#if ship.settings.general.accept_marketing}}
+    {{#ifEqual ship.settings.general.accept_marketing "hidden"}}
+    {{else}}
     <li class="list-group-item accept-marketing">
       <input id="accept-marketing" type="checkbox" value="true" name='accept_marketing' {{#ifEqual ship.settings.general.accept_marketing "checked"}}checked='checked'{{/ifEqual}}>
       <label for="accept-marketing">{{t "accept_marketing_question"}}</label>
     </li>
-    {{/if}}
+    {{/ifEqual}}
   </ul>
 
   <button class="btn btn-block btn-primary" type="submit">

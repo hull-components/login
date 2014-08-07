@@ -13,6 +13,12 @@ Hull.component({
   },
 
   initialize: function() {
+    if (this.options.editMode) {
+      this.sandbox.on('ship.update', function(ship) {
+        this.ship = ship;
+        this.render();
+      }, this);
+    }
     this.$el.attr('id', this.cid);
     I18n.fallbacks = true;
     I18n.locale = this.options.locale || navigator.language;
@@ -37,7 +43,6 @@ Hull.component({
     'keyup input[type="email"]': function(e) {
       var val = $(e.target).val();
       if (this.isEmail(val)) {
-        console.warn('currentEmail', val);
         this.currentEmail = val;
       }
     },
@@ -129,9 +134,9 @@ Hull.component({
     this.ship = data.ship;
     data.styleNamespace = "#" + this.cid;
     I18n.translations = data.ship.locales;
-    var authServices = this.authServices();
+    var authServices = _.intersection(this.authServices(), data.ship.settings.social.providers);
     data.authServices = {};
-    var loggedIn = this.loggedIn()
+    var loggedIn = this.loggedIn();
     _.map(authServices, function(provider) {
       data.authServices[provider] = {
         linked: loggedIn && loggedIn[provider]
