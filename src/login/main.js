@@ -37,7 +37,7 @@ Hull.component(function() {
         }
       });
       this.sandbox.on('hull.auth.fail', function(error) {
-        self.alertMessage("Oops, login failed: " + (error.message || error.reason));
+        self.alertMessage(error.message || error.reason);
       });
       this.sandbox.on('hull.auth.logout', function(error) {
         self.renderSection('sign-up');
@@ -58,6 +58,11 @@ Hull.component(function() {
         if (this.isValidEmail(val)) {
           this.currentEmail = val;
         }
+      },
+
+      'submit form': function(e) {
+        e.preventDefault();
+        this.alertMessage(false);
       },
 
       'submit form[data-action="signup"]': function(e) {
@@ -109,7 +114,13 @@ Hull.component(function() {
     },
 
     alertMessage: function(msg) {
-      if (msg) alert(msg);
+      var $alert = this.$('.alert-message');
+      if (msg) {
+        $alert.html(msg);
+        $alert.show();
+      } else {
+        $alert.hide();
+      }
     },
 
     isValidEmail: function(str) {
