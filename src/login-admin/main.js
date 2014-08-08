@@ -11,40 +11,67 @@ Hull.component({
     },
   },
 
-  beforeRender: function(data) {
-    this.schema = data.schema;
-    data.editorId = this.cid + "-editor";
+  actions: {
+    displaySection: function(event, action) {
+      this.$('[role="tablist"] li').removeClass('active');
+      this.editSection(action.data.section);
+    }
   },
 
-  afterRender: function(data) {
-    var self = this,
-      _ = this.sandbox.util._;
-    var editor = new JSONEditor(document.getElementById(data.editorId), {
+  createEditor: function(schema, startval, el) {
+    return new JSONEditor(el || document.createElement('div'), {
       ajax: true,
-      schema: data.schema,
+      schema: schema || {},
+      startval: startval || {},
       theme: this.options.theme || 'bootstrap3',
       iconlib: this.options.iconlib || 'fontawesome4',
       no_additional_properties: true,
       disable_edit_json: true,
-      disable_properties: true,
-      startval: data.ship
+      disable_properties: true
     });
+  },
 
-    editor.on('ready', function() {});
+  editSection: function(sectionName) {
+    var section = this.sections[sectionName];
+    if (section) {
+      var _ = this.sandbox.util._;
+      this.editor && this.editor.destroy();
+      this.editor = this.createEditor(section.schema, this.ship[sectionName], this.$editorElement[0]);
+      this.$("[data-hull-section='" + sectionName + "']").parent().addClass('active');
+      var onChange = _.debounce(_.bind(this.onChange, this, sectionName), 50);
+      this.editor.on('change', onChange);
+      return this.editor;
+    }
+  },
 
-    var onChange = _.debounce(function() {
-      var ship = self.ship = editor.getValue();
-      var errors = editor.validate();
-      if (errors.length == 0) {
-        self.ship = ship;
-        self.sandbox.emit('ship.update', self.ship);
-      } else {
-        console.error('Validation Errors', errors);
+  onChange: function(sectionName) {
+    var errors = this.editor.validate();
+    if (errors.length == 0) {
+      this.ship[sectionName] = this.editor.getValue();
+      this.sandbox.emit('ship.update', this.ship);
+    } else {
+      console.error('Validation Errors', errors);
+    }
+  },
+
+  beforeRender: function(data) {
+    var _ = this.sandbox.util._;
+    var editor = this.rootEditor = this.createEditor(data.schema);
+    this.ship = data.ship;
+    this.sections = data.sections = {};
+    _.map(data.schema.properties, function(prop, sectionName) {
+      data.sections[sectionName] = {
+        schema: _.extend({}, {
+          definitions: data.schema.definitions
+        }, editor.expandRefs(prop))
       }
-    }, 100);
+    });
+  },
 
-    editor.on('change', onChange);
-
-    this.editor = editor;
+  afterRender: function(data) {
+    var _ = this.sandbox.util._;
+    console.error('----------------- afterRender !');
+    this.$editorElement = this.$('[data-editor]');
+    var firstSection = _.keys(this.sections)[0];
   }
 });

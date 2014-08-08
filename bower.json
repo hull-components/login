@@ -21,6 +21,7 @@
     "docs"
   ],
   "dependencies": {
-    "json-editor": "0.7.4"
+    "json-editor": "0.7.4",
+    "vex": "~2.2.1"
   }
 }

@@ -1,21 +1,62 @@
 <html>
 <head>
   <title>Hull Components - {{options.sourceName}} - version: {{options.version}}</title>
+  <link href="./login/vex.css" rel="stylesheet">
+  <link href="./login/vex-theme-plain.css" rel="stylesheet">
   <link href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet">
-  <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
   <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+  <script src="./login/vex.combined.min.js"></script>
   <script src="{{config.init.jsUrl}}/{{config.version}}/hull.js"></script>
   <script>
+    vex.defaultOptions.className = 'vex-theme-plain';
 	  Hull.init({{{initConfig}}});
+    Hull.dialog = {};
+    Hull.dialog.open = function(component, options) {
+      var ret;
+      var dataStuff = ["data-hull-component='" + component + "'"];
+      for (k in options) {
+        dataStuff.push("data-hull-" + k + "='" + options[k] +  "'");
+      }
+
+      var content = '<div ' + dataStuff.join(" ") + '></div>';
+      var o = vex.open({
+        content: content,
+        afterOpen: function($vexContent) {
+          ret = Hull.parse($vexContent);
+        }
+      });
+      o.bind('vexOpen', function(options) {
+        console.warn("Components vexed !", ret);
+      });
+      o.bind('vexClose', function() {
+        console.warn('Vex closed !');
+      });
+    }
+    Hull.dialog.close = function() {
+      vex.close();
+    }
+    Hull.ready(function(_, user) {
+      function updt(user) {
+        var me = user || Hull.currentUser();
+        var $btn = $('.btn-login');
+        console.warn("Hello ", arguments);
+        if (me) {
+          $btn.text('Hello ' + me.name);
+        } else {
+          $btn.text('Login now...')
+        }
+      }
+      updt(user);
+      Hull.on('model.hull.me.change', updt);
+    });
 	</script>
 </head>
 <body>
+
   <div class="container">
     <div class="row">
       <div class="col-md-4">
-        <div style="position:fixed;">
-          <div data-hull-component="login" data-hull-edit-mode="true" style="width: 350px;"></div>
-        </div>
+        <div data-hull-component="login" data-hull-edit-mode="true"></div>
       </div>
       <div class="col-md-8">
         <div data-hull-component="login-admin"></div>

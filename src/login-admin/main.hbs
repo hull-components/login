@@ -1,1 +1,8 @@
-<div id="{{editorId}}"></div>
+<ul class="nav nav-pills nav-justified" role="tablist">
+{{#each sections}}
+  <li><a href="#" data-hull-action="displaySection" data-hull-section="{{@key}}">{{schema.title}}</a></li>
+{{/each}}
+</ul>
+
+
+<div data-editor></div>

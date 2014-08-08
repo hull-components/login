@@ -30,7 +30,11 @@ Hull.component(function() {
       I18n.locale = this.options.locale || navigator.language;
       var self = this;
       this.sandbox.on('hull.auth.login', function() {
-        self.renderSection('profile-form');
+        if (self.ship.profile.enabled) {
+          self.renderSection('profile-form');
+        } else {
+          Hull.dialog && Hull.dialog.close && Hull.dialog.close();
+        }
       });
       this.sandbox.on('hull.auth.fail', function(error) {
         self.alertMessage("Oops, login failed: " + (error.message || error.reason));
@@ -193,11 +197,11 @@ Hull.component(function() {
     getForm: function(formName, user) {
       var self = this,
         _ = this.sandbox.util._;
-      if (!this.ship.settings[formName] || !this.ship.settings[formName].form) {
+      if (!this.ship[formName] || !this.ship[formName].form) {
         return {};
       };
       if (user) {
-        var form = _.map(this.ship.settings[formName].form, function(field) {
+        var form = _.map(this.ship[formName].form, function(field) {
           var f = _.clone(field);
           var k = f.name;
           if (user[k]) {
@@ -218,7 +222,7 @@ Hull.component(function() {
       this.ship = data.ship;
       data.styleNamespace = "#" + this.cid;
       I18n.translations = data.ship.locales;
-      var authServices = _.intersection(this.authServices(), data.ship.settings.social.providers);
+      var authServices = _.intersection(this.authServices(), data.ship.social.providers);
       data.authServices = {};
       var loggedIn = this.loggedIn();
       _.map(authServices, function(provider) {

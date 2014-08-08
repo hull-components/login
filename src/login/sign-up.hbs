@@ -11,7 +11,7 @@
   </p>
 </div>
 
-{{#if ship.settings.social.enabled}}
+{{#if ship.social.enabled}}
 <div class="social-login">
   {{#each authServices}}
   <button data-hull-action="login" data-hull-provider="{{@key}}" class="btn btn-block social-btn social-btn-{{@key}}">
@@ -28,15 +28,15 @@
 
 <form class="signup-form" data-action="signup">
   <ul class="list-group signup-form-fields">
-    {{#each ship.settings.signup.form}}
+    {{#each ship.signup.form}}
     <li class="list-group-item">
       <input type="{{inputType}}" name="{{name}}" class="form-control" placeholder="{{title}}" {{#if required}}required{{/if}}>
     </li>
     {{/each}}
-    {{#ifEqual ship.settings.general.accept_marketing "hidden"}}
+    {{#ifEqual ship.general.accept_marketing "hidden"}}
     {{else}}
     <li class="list-group-item accept-marketing">
-      <input id="accept-marketing" type="checkbox" value="true" name='accept_marketing' {{#ifEqual ship.settings.general.accept_marketing "checked"}}checked='checked'{{/ifEqual}}>
+      <input id="accept-marketing" type="checkbox" value="true" name='accept_marketing' {{#ifEqual ship.general.accept_marketing "checked"}}checked='checked'{{/ifEqual}}>
       <label for="accept-marketing">{{t "accept_marketing_question"}}</label>
     </li>
     {{/ifEqual}}
@@ -51,8 +51,8 @@
 <div class="login-footer">
   <p>
     {{t "By signing up you agree to our"}}
-    <a href="{{ship.settings.general.privacy_polycy_url}}" target="_blank">{{t "Privacy Policy"}}</a>
+    <a href="{{ship.general.privacy_polycy_url}}" target="_blank">{{t "Privacy Policy"}}</a>
     {{t "and"}}
-    <a href="{{ship.settings.general.terms_of_service_url}}" target="_blank">{{t "Terms of Service"}}</a>
+    <a href="{{ship.general.terms_of_service_url}}" target="_blank">{{t "Terms of Service"}}</a>
   </p>
 </div>

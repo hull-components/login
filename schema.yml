@@ -79,112 +79,110 @@ definitions:
     type: "array"
     items:
       $ref: "#/definitions/user-form-field"
-  settings:
-    $schema: "http://json-schema.org/draft-04/schema#"
+  general:
+    title: "General"
+    description: "General settings"
     type: "object"
-    title: "Settings"
-    description: "General settings for the component"
     properties:
-      general:
-        title: "General"
-        description: "General settings"
-        type: "object"
-        properties:
-          terms_of_service_url:
-            $ref: "#/definitions/url"
-            title: "Terms of service URL"
-            example: "http://hull.io/tos"
-          privacy_policy_url:
-            $ref: "#/definitions/url"
-            title: "Privacy policy URL"
-            example: "http://hull.io/pp"
-          accept_marketing:
-            type: "string"
-            title: "Accept marketing checkbox"
-            description: "Whether the user is asked for permission to receive marketing emails. default: 'checked'"
-            enum:
-              - "checked"
-              - "unchecked"
-              - "hidden"
-            default: "checked"
-            example: "checked"
-          redirect_url:
-            $ref: "#/definitions/url"
-            title: "Redirect URL"
-            description: "URL where the user is redirected to when the signup or login flow is complete."
-            example: "https://accounts.hullapp.io"
-        required:
-          - "accept_marketing"
-      social:
-        title: "Social login"
-        description: "Enable Social login and configure providers"
-        type: "object"
-        properties:
-          enabled:
-            type: "boolean"
-            description: "Enables or disables display of social login buttons."
-            default: true
-            example: true
-          providers:
-            type: "multiselect"
-            descripton: "Ordered list of authentication providers."
-            minItems: 0
-            maxItems: 3
-            uniqueItems: true
-            items:
-              title: "Auth Service"
-              $ref: "#/definitions/auth-provider"
-        required:
-          - "enabled"
-          - "providers"
+      terms_of_service_url:
+        $ref: "#/definitions/url"
+        title: "Terms of service URL"
+        example: "http://hull.io/tos"
+      privacy_policy_url:
+        $ref: "#/definitions/url"
+        title: "Privacy policy URL"
+        example: "http://hull.io/pp"
+      accept_marketing:
+        type: "string"
+        title: "Accept marketing checkbox"
+        description: "Whether the user is asked for permission to receive marketing emails. default: 'checked'"
+        enum:
+          - "checked"
+          - "unchecked"
+          - "hidden"
+        default: "checked"
+        example: "checked"
+      redirect_url:
+        $ref: "#/definitions/url"
+        title: "Redirect URL"
+        description: "URL where the user is redirected to when the signup or login flow is complete."
+        example: "https://accounts.hullapp.io"
+    required:
+      - "accept_marketing"
+  social:
+    title: "Social login"
+    description: "Enable Social login and configure providers"
+    type: "object"
+    properties:
+      enabled:
+        type: "boolean"
+        description: "Enables or disables display of social login buttons."
+        default: true
+        example: true
+      providers:
+        type: "multiselect"
+        descripton: "Ordered list of authentication providers."
+        minItems: 0
+        maxItems: 3
+        uniqueItems: true
+        items:
+          title: "Auth Service"
+          $ref: "#/definitions/auth-provider"
+    required:
+      - "enabled"
+      - "providers"
+    default:
+      - "facebook"
+      - "twitter"
+  signup:
+    title: "Signup"
+    type: "object"
+    properties:
+      form:
+        title: "Signup form"
+        description: "Fields displayed in signup form"
+        $ref: "#/definitions/user-form-schema"
+        format: "array"
         default:
-          - "facebook"
-          - "twitter"
-      signup:
-        title: "Signup"
-        type: "object"
-        properties:
-          form:
-            title: "Signup form"
-            description: "Fields displayed in signup form"
-            $ref: "#/definitions/user-form-schema"
-            format: "array"
-            default:
-              - name: "email"
-                type: "string"
-                inputType: "text"
-                title: "Email"
-                required: true
-              - name: "password"
-                type: "string"
-                inputType: "password"
-                title: "Password"
-                required: true
-      profile:
-        title: "Profile"
-        type: "object"
-        properties:
-          form:
-            title: "Profile form"
-            description: "Fields displayed in profile form"
-            $ref: "#/definitions/user-form-schema"
-            format: "array"
-            default:
-              - name: "address"
-                type: "string"
-                inputType: "text"
-                title: "Address"
-                required: true
-              - name: "city"
-                type: "string"
-                inputType: "text"
-                title: "City"
-                required: true
-              - name: "zipcode"
-                type: "string"
-                inputType: "text"
-                title: "Zipcode"
-                required: true
+          - name: "email"
+            type: "string"
+            inputType: "text"
+            title: "Email"
+            required: true
+          - name: "password"
+            type: "string"
+            inputType: "password"
+            title: "Password"
+            required: true
+  profile:
+    title: "Profile"
+    type: "object"
+    properties:
+      enabled:
+        title: "Enabled"
+        type: "boolean"
+        default: false
+      form:
+        title: "Profile form"
+        description: "Fields displayed in profile form"
+        $ref: "#/definitions/user-form-schema"
+        format: "array"
+        default:
+          - name: "address"
+            type: "string"
+            inputType: "text"
+            title: "Address"
+            required: true
+          - name: "city"
+            type: "string"
+            inputType: "text"
+            title: "City"
+            required: true
+          - name: "zipcode"
+            type: "string"
+            inputType: "text"
+            title: "Zipcode"
+            required: true
   appearance:
     $schema: "http://json-schema.org/draft-04/schema#"
     type: "object"
@@ -231,13 +229,22 @@ definitions:
         $ref: "#/definitions/translations"
         title: "French"
 properties:
-  settings:
-    $ref: "#/definitions/settings"
+  general:
+    $ref: "#/definitions/general"
+  social:
+    $ref: "#/definitions/social"
+  signup:
+    $ref: "#/definitions/signup"
+  profile:
+    $ref: "#/definitions/profile"
   appearance:
     $ref: "#/definitions/appearance"
   locales:
     $ref: "#/definitions/locales"
 required:
-  - settings
+  - general
+  - social
+  - signup
+  - profile
   - appearance
   - locales
