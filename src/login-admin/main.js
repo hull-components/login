@@ -23,8 +23,8 @@ Hull.component({
       ajax: true,
       schema: schema || {},
       startval: startval || {},
-      theme: this.options.theme || 'bootstrap3',
-      iconlib: this.options.iconlib || 'fontawesome4',
+      theme: this.options.theme || 'hullstrap',
+      iconlib: this.options.iconlib || 'hullstrap',
       no_additional_properties: true,
       disable_edit_json: true,
       disable_properties: true
@@ -33,6 +33,7 @@ Hull.component({
 
   editSection: function(sectionName) {
     var section = this.sections[sectionName];
+    console.warn("Editing section:", sectionName, section);
     if (section) {
       var _ = this.sandbox.util._;
       this.editor && this.editor.destroy();
@@ -70,8 +71,8 @@ Hull.component({
 
   afterRender: function(data) {
     var _ = this.sandbox.util._;
-    console.error('----------------- afterRender !');
     this.$editorElement = this.$('[data-editor]');
     var firstSection = _.keys(this.sections)[0];
+    this.editSection(firstSection);
   }
 });

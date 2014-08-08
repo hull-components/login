@@ -1,8 +1,20 @@
-<ul class="nav nav-pills nav-justified" role="tablist">
-{{#each sections}}
-  <li><a href="#" data-hull-action="displaySection" data-hull-section="{{@key}}">{{schema.title}}</a></li>
-{{/each}}
-</ul>
+<div class="offcanvas-navbar navbar navbar-branded navbar-static-top">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <a class="navbar-brand" href="/">
+        <i class="logo"></i>
+      </a>
+    </div>
+    <div class="offcanvas-sidebar offcanvas-sidebar-right">
+      <ul class="nav navbar-nav" role="tablist">
+        {{#each sections}}
+          <li class="navbar-item"><a href="#" data-hull-action="displaySection" data-hull-section="{{@key}}">{{schema.title}}</a></li>
+        {{/each}}
+      </ul>
+    </div>
+  </div>
+</div>
 
 
-<div data-editor></div>
+
+<div data-editor style="padding: 20px;"></div>

@@ -1,0 +1,58 @@
+<html>
+<head>
+  <title>Hull Components - {{options.sourceName}} - version: {{options.version}}</title>
+  <link href="./login/vex.css" rel="stylesheet">
+  <link href="./login/vex-theme-plain.css" rel="stylesheet">
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+  <script src="./login/vex.combined.min.js"></script>
+  <script src="{{config.init.jsUrl}}/{{config.version}}/hull.js"></script>
+  <script>
+    vex.defaultOptions.className = 'vex-theme-plain';
+    Hull.init({{{initConfig}}});
+    Hull.dialog = {};
+    Hull.dialog.open = function(component, options) {
+      var ret;
+      var dataStuff = ["data-hull-component='" + component + "'"];
+      for (k in options) {
+        dataStuff.push("data-hull-" + k + "='" + options[k] +  "'");
+      }
+      var content = '<div ' + dataStuff.join(" ") + '></div>';
+      var o = vex.open({
+        content: content,
+        afterOpen: function($vexContent) {
+          ret = Hull.parse($vexContent);
+        }
+      });
+
+      o.bind('vexClose', openDialog);
+    }
+
+    Hull.dialog.close = function() {
+      vex.close();
+    }
+
+    Hull.ready(openDialog);
+
+    function openDialog() {
+      console.warn("Re-opening dialog !");
+      setTimeout(function() {
+        Hull.dialog.open('login', { 'edit-mode': true });
+      }, 500);
+    }
+
+    window.addEventListener('message', function(e) {
+      var message = e.data;
+      if (message && message.event === 'ship.update') {
+        Hull.emit('ship.update', message.ship);
+      }
+    }, false);
+  </script>
+  <style>
+  .vex.vex-theme-plain {
+    padding-top: 70px;
+  }
+  </style>
+</head>
+<body>
+</body>
+</html>
