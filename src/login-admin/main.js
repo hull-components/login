@@ -15,6 +15,9 @@ Hull.component({
     displaySection: function(event, action) {
       this.$('[role="tablist"] li').removeClass('active');
       this.editSection(action.data.section);
+    },
+    saveTheShip: function() {
+      alert("Not implemented yet !");
     }
   },
 
