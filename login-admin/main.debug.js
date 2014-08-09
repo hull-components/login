@@ -17,7 +17,7 @@ function program1(depth0,data) {
   return buffer;
   }
 
-  buffer += "<nav class=\"navbar navbar-branded\" role=\"navigation\">\n  <div class=\"container-fluid\">\n    <div class=\"collapse navbar-collapse\">\n      <ul class=\"nav navbar-nav\">\n        <li><a class=\"btn btn-default btn-rounded\">Exit</a></li>\n      </ul>\n      <ul class=\"nav navbar-nav navbar-right\">\n        <li><a class=\"btn btn-default btn-rounded\">Save</a></li>\n      </ul>\n    </div>\n  </div>\n</nav>\n\n<ul class=\"nav nav-tabs nav-justified\" role=\"tablist\">\n  ";
+  buffer += "<nav class=\"navbar navbar-branded\" role=\"navigation\">\n  <div class=\"container-fluid\">\n    <div class=\"collapse navbar-collapse\">\n      <ul class=\"nav navbar-nav\">\n        <li><a class=\"btn btn-danger\" data-hull-action=\"saveTheShip\">Save</a></li>\n      </ul>\n      <ul class=\"nav navbar-nav navbar-right\">\n\n      </ul>\n    </div>\n  </div>\n</nav>\n\n<ul class=\"nav nav-tabs nav-justified\" role=\"tablist\">\n  ";
   stack1 = helpers.each.call(depth0, (depth0 && depth0.sections), {hash:{},inverse:self.noop,fn:self.program(1, program1, data),data:data});
   if(stack1 || stack1 === 0) { buffer += stack1; }
   buffer += "\n</ul>\n\n<div data-editor style=\"padding: 20px;\"></div>\n";
@@ -41,6 +41,9 @@ Hull.component({
     displaySection: function(event, action) {
       this.$('[role="tablist"] li').removeClass('active');
       this.editSection(action.data.section);
+    },
+    saveTheShip: function() {
+      alert("Not implemented yet !");
     }
   },
 

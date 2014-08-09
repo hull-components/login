@@ -1,6 +1,6 @@
 {
   "name": "login-admin",
-  "version": "83bb1f65c1f949d060342be7d58ca99986642a0b",
+  "version": "b67c78f2813b0ac30b5b418b57dab402fd3733e1",
   "files": {
     "templates": [
       "main.hbs"
@@ -11,6 +11,6 @@
       "main.js"
     ]
   },
-  "buildDate": "2014-08-09T08:47:02.503Z",
+  "buildDate": "2014-08-09T08:51:41.306Z",
   "translations": []
 }

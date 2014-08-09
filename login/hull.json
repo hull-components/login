@@ -1,6 +1,6 @@
 {
   "name": "login",
-  "version": "83bb1f65c1f949d060342be7d58ca99986642a0b",
+  "version": "b67c78f2813b0ac30b5b418b57dab402fd3733e1",
   "files": {
     "templates": [
       "profile-form.hbs",
@@ -21,7 +21,7 @@
       "vex.combined.min.js"
     ]
   },
-  "buildDate": "2014-08-09T08:47:03.851Z",
+  "buildDate": "2014-08-09T08:51:42.634Z",
   "translations": [
     "Already have an account?",
     "Back to login",
