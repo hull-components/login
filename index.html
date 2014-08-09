@@ -1,32 +1,51 @@
 <html>
 <head>
-  <title>Hull Components - login - version: bc0af89ee1c1d902cf5c265821dea1555b7fc476</title>
-  <link href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet">
-  <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+  <title>Hull Components - login - version: 83bb1f65c1f949d060342be7d58ca99986642a0b</title>
+  <link href="//hls3.s3.amazonaws.com/stylesheets/dashboard.css" rel="stylesheet">
   <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-  <script src="https://s3.amazonaws.com/hull-js/0.8/hull.debug.js"></script>
+  <script src="https://s3.amazonaws.com/hull-js/0.8/hull.js"></script>
   <script>
-	  var cfg = {"appId":"516d68fc28e06bb7b8000040","orgUrl":"https://hull-demos.hullapp.io","jsUrl":"https://s3.amazonaws.com/hull-js","debug":false,"sources":{"default":"."}};
-	  Hull.init(cfg);
-    Hull.startLogin = function($el, options) {
-      var $root = $('#hull-root');
-      if ($root.length == 0) {
-        $root = $("<div/>").attr('id', 'hull-root');
-        $('body').append($root);
-      }
-      $component = $("<div/>").attr('data-hull-component', 'login');
-      $el = $el || $root;
-      $el.html($component);
-      Hull.parse($el);
-    }
-    Hull.ready(function() {
-      setTimeout(function() {
-        // Hull.startLogin();
-      }, 2000);
-    });
+	  Hull.init({"appId":"516d68fc28e06bb7b8000040","orgUrl":"https://hull-demos.hullapp.io","jsUrl":"https://s3.amazonaws.com/hull-js","debug":true,"sources":{"default":"."}});
+    $(function() {
+      var preview = document.getElementById('preview').contentWindow;
+      Hull.on('ship.update', function(ship) {
+        console.warn("Updating ship !", ship);
+        preview.postMessage({ event: 'ship.update', ship: ship }, '*');
+      });
+    })
 	</script>
+  <style>
+  #preview-container {
+    box-shadow: #d4d4d4 -1px 0 0,rgba(0,0,0,0.05) 1px 0 2px inset;
+    background-image: url('http://hull.io/images/try/ps_neutral.png');
+  }
+
+  #preview {
+    width: 100%;
+    height: 100%;
+  }
+
+  .pane-container {
+    overflow-x: hidden;
+    overflow-y: scroll;
+    height: 100%;
+    padding: 0px;
+  }
+
+  .navbar-branded { padding: 10px; }
+  </style>
 </head>
 <body>
-  <div data-hull-component="login" style="width:350px">Loading...</div>
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-md-6 pane-container" id="admin-container">
+        <div data-hull-component="login-admin"></div>
+      </div>
+      <div class="col-md-6 pane-container" id='preview-container'>
+        <iframe src="./preview.html" frameborder="0" id="preview"></iframe>
+      </div>
+    </div>
+  </div>
+
 </body>
 </html>

@@ -1,0 +1,454 @@
+{
+  "$schema": "http://hull-components/schema#",
+  "id": "http://hull-components.github.io/login/schema#",
+  "title": "Signup / Login component",
+  "description": "This is a packaged, embeddable and highly configurable component to sign users up or log them in to your apps.",
+  "type": "object",
+  "definitions": {
+    "url": {
+      "type": "string",
+      "format": "url",
+      "pattern": "^(?:(?:https?):\\/\\/)(?:\\S+(?::\\S*)?@)?(?:(?!10(?:\\.\\d{1,3}){3})(?!127(?:\\.\\d{1,3}){3})(?!169\\.254(?:\\.\\d{1,3}){2})(?!192\\.168(?:\\.\\d{1,3}){2})(?!172\\.(?:1[6-9]|2\\d|3[0-1])(?:\\.\\d{1,3}){2})(?:[1-9]\\d?|1\\d\\d|2[01]\\d|22[0-3])(?:\\.(?:1?\\d{1,2}|2[0-4]\\d|25[0-5])){2}(?:\\.(?:[1-9]\\d?|1\\d\\d|2[0-4]\\d|25[0-4]))|(?:(?:[a-zA-Z\\u00a1-\\uffff0-9]+-?)*[a-zA-Z\\u00a1-\\uffff0-9]+)(?:\\.(?:[a-zA-Z\\u00a1-\\uffff0-9]+-?)*[a-zA-Z\\u00a1-\\uffff0-9]+)*(?:\\.(?:[a-zA-Z\\u00a1-\\uffff]{2,})))(?::\\d{2,5})?(?:\\/[^\\s]*)?$"
+    },
+    "color": {
+      "format": "color",
+      "type": "string",
+      "description": "hex color",
+      "pattern": "^#([a-f]|[A-F]|[0-9]){3}(([a-f]|[A-F]|[0-9]){3})?$"
+    },
+    "email": {
+      "type": "string",
+      "pattern": "^\\S+@\\S+\\.\\S+$",
+      "format": "email"
+    },
+    "password": {
+      "type": "string",
+      "format": "password"
+    },
+    "image-url": {
+      "type": "string",
+      "format": "url",
+      "$ref": "#/definitions/url"
+    },
+    "auth-provider": {
+      "type": "string",
+      "enum": [
+        "facebook",
+        "foursquare",
+        "github",
+        "google",
+        "instagram",
+        "linkedin",
+        "twitter"
+      ]
+    },
+    "user-form-field": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "type": {
+          "type": "string",
+          "enum": [
+            "string",
+            "number",
+            "boolean"
+          ]
+        },
+        "inputType": {
+          "type": "string",
+          "default": "text",
+          "enum": [
+            "text",
+            "password",
+            "number",
+            "date",
+            "datetime",
+            "email",
+            "range",
+            "tel",
+            "time",
+            "url",
+            "week",
+            "file",
+            "color"
+          ]
+        },
+        "required": {
+          "type": "boolean"
+        },
+        "title": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string",
+          "format": "textarea"
+        }
+      },
+      "required": [
+        "name",
+        "type",
+        "required",
+        "title"
+      ]
+    },
+    "user-form-schema": {
+      "$schema": "http://json-schema.org/draft-04/schema#",
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/user-form-field"
+      }
+    },
+    "general": {
+      "title": "General",
+      "description": "General settings",
+      "type": "object",
+      "properties": {
+        "terms_of_service_url": {
+          "$ref": "#/definitions/url",
+          "title": "Terms of service URL",
+          "example": "http://hull.io/tos"
+        },
+        "privacy_policy_url": {
+          "$ref": "#/definitions/url",
+          "title": "Privacy policy URL",
+          "example": "http://hull.io/pp"
+        },
+        "accept_marketing": {
+          "type": "string",
+          "title": "Accept marketing checkbox",
+          "description": "Whether the user is asked for permission to receive marketing emails. default: 'checked'",
+          "enum": [
+            "checked",
+            "unchecked",
+            "hidden"
+          ],
+          "default": "checked",
+          "example": "checked"
+        },
+        "redirect_url": {
+          "$ref": "#/definitions/url",
+          "title": "Redirect URL",
+          "description": "URL where the user is redirected to when the signup or login flow is complete.",
+          "example": "https://accounts.hullapp.io"
+        }
+      },
+      "required": [
+        "accept_marketing"
+      ]
+    },
+    "social": {
+      "title": "Social login",
+      "description": "Enable Social login and configure providers",
+      "type": "object",
+      "properties": {
+        "enabled": {
+          "type": "boolean",
+          "description": "Enables or disables display of social login buttons.",
+          "default": true,
+          "example": true
+        },
+        "providers": {
+          "type": "multiselect",
+          "descripton": "Ordered list of authentication providers.",
+          "minItems": 0,
+          "maxItems": 3,
+          "uniqueItems": true,
+          "items": {
+            "title": "Auth Service",
+            "$ref": "#/definitions/auth-provider"
+          }
+        }
+      },
+      "required": [
+        "enabled",
+        "providers"
+      ],
+      "default": [
+        "facebook",
+        "twitter"
+      ]
+    },
+    "signup": {
+      "title": "Signup",
+      "type": "object",
+      "properties": {
+        "form": {
+          "title": "Signup form",
+          "description": "Fields displayed in signup form",
+          "$ref": "#/definitions/user-form-schema",
+          "format": "array",
+          "default": [
+            {
+              "name": "email",
+              "type": "string",
+              "inputType": "text",
+              "title": "Email",
+              "required": true
+            },
+            {
+              "name": "password",
+              "type": "string",
+              "inputType": "password",
+              "title": "Password",
+              "required": true
+            }
+          ]
+        }
+      }
+    },
+    "profile": {
+      "title": "Profile",
+      "type": "object",
+      "properties": {
+        "enabled": {
+          "title": "Enabled",
+          "type": "boolean",
+          "default": false
+        },
+        "form": {
+          "title": "Profile form",
+          "description": "Fields displayed in profile form",
+          "$ref": "#/definitions/user-form-schema",
+          "format": "array",
+          "default": [
+            {
+              "name": "address",
+              "type": "string",
+              "inputType": "text",
+              "title": "Address",
+              "required": true
+            },
+            {
+              "name": "city",
+              "type": "string",
+              "inputType": "text",
+              "title": "City",
+              "required": true
+            },
+            {
+              "name": "zipcode",
+              "type": "string",
+              "inputType": "text",
+              "title": "Zipcode",
+              "required": true
+            }
+          ]
+        }
+      }
+    },
+    "appearance": {
+      "$schema": "http://json-schema.org/draft-04/schema#",
+      "type": "object",
+      "title": "Appearance",
+      "description": "Appearance related options for the component",
+      "properties": {
+        "logo_url": {
+          "title": "Logo URL",
+          "description": "Brand logo displayed in the header. Dimensions should not exceed 150px x 100px.",
+          "example": "https://dl.dropboxusercontent.com/u/264017/Hull/images/pahte-logo.png",
+          "$ref": "#/definitions/image-url"
+        },
+        "main_color": {
+          "title": "Main color",
+          "description": "Main color used for the titles and buttons.",
+          "$ref": "#/definitions/color"
+        },
+        "show_social_icons": {
+          "title": "Show Social Icons",
+          "description": "Show / Hide social network's icons in login buttons.",
+          "type": "boolean",
+          "default": true
+        }
+      }
+    },
+    "translations": {
+      "type": "object",
+      "properties": {
+        "Already have an account?": {
+          "type": "string",
+          "default": "Already have an account?",
+          "title": "Already have an account?"
+        },
+        "Back to login": {
+          "type": "string",
+          "default": "Back to login",
+          "title": "Back to login"
+        },
+        "By signing up you agree to our": {
+          "type": "string",
+          "default": "By signing up you agree to our",
+          "title": "By signing up you agree to our"
+        },
+        "Don't have an account?": {
+          "type": "string",
+          "default": "Don't have an account?",
+          "title": "Don't have an account?"
+        },
+        "Edit my profile": {
+          "type": "string",
+          "default": "Edit my profile",
+          "title": "Edit my profile"
+        },
+        "Email": {
+          "type": "string",
+          "default": "Email",
+          "title": "Email"
+        },
+        "Email or Username": {
+          "type": "string",
+          "default": "Email or Username",
+          "title": "Email or Username"
+        },
+        "Forgot your password?": {
+          "type": "string",
+          "default": "Forgot your password?",
+          "title": "Forgot your password?"
+        },
+        "I will complete it later": {
+          "type": "string",
+          "default": "I will complete it later",
+          "title": "I will complete it later"
+        },
+        "Link": {
+          "type": "string",
+          "default": "Link",
+          "title": "Link"
+        },
+        "Log in": {
+          "type": "string",
+          "default": "Log in",
+          "title": "Log in"
+        },
+        "Log in with": {
+          "type": "string",
+          "default": "Log in with",
+          "title": "Log in with"
+        },
+        "Log out": {
+          "type": "string",
+          "default": "Log out",
+          "title": "Log out"
+        },
+        "Password": {
+          "type": "string",
+          "default": "Password",
+          "title": "Password"
+        },
+        "Please fill out your profile": {
+          "type": "string",
+          "default": "Please fill out your profile",
+          "title": "Please fill out your profile"
+        },
+        "Privacy Policy": {
+          "type": "string",
+          "default": "Privacy Policy",
+          "title": "Privacy Policy"
+        },
+        "Recover password": {
+          "type": "string",
+          "default": "Recover password",
+          "title": "Recover password"
+        },
+        "Save my profile": {
+          "type": "string",
+          "default": "Save my profile",
+          "title": "Save my profile"
+        },
+        "Sign up": {
+          "type": "string",
+          "default": "Sign up",
+          "title": "Sign up"
+        },
+        "Sign up with": {
+          "type": "string",
+          "default": "Sign up with",
+          "title": "Sign up with"
+        },
+        "Terms of Service": {
+          "type": "string",
+          "default": "Terms of Service",
+          "title": "Terms of Service"
+        },
+        "Unlink": {
+          "type": "string",
+          "default": "Unlink",
+          "title": "Unlink"
+        },
+        "accept_marketing_question": {
+          "type": "string",
+          "default": "accept_marketing_question",
+          "title": "accept_marketing_question"
+        },
+        "and": {
+          "type": "string",
+          "default": "and",
+          "title": "and"
+        },
+        "or": {
+          "type": "string",
+          "default": "or",
+          "title": "or"
+        },
+        "signin_title": {
+          "type": "string",
+          "default": "signin_title",
+          "title": "signin_title"
+        },
+        "signup_title": {
+          "type": "string",
+          "default": "signup_title",
+          "title": "signup_title"
+        },
+        "thank_you_title": {
+          "type": "string",
+          "default": "thank_you_title",
+          "title": "thank_you_title"
+        }
+      }
+    },
+    "locales": {
+      "type": "object",
+      "title": "Translations",
+      "properties": {
+        "en": {
+          "$ref": "#/definitions/translations",
+          "title": "English"
+        },
+        "fr": {
+          "$ref": "#/definitions/translations",
+          "title": "French"
+        }
+      }
+    }
+  },
+  "properties": {
+    "general": {
+      "$ref": "#/definitions/general"
+    },
+    "social": {
+      "$ref": "#/definitions/social"
+    },
+    "signup": {
+      "$ref": "#/definitions/signup"
+    },
+    "profile": {
+      "$ref": "#/definitions/profile"
+    },
+    "appearance": {
+      "$ref": "#/definitions/appearance"
+    },
+    "locales": {
+      "$ref": "#/definitions/locales"
+    }
+  },
+  "required": [
+    "general",
+    "social",
+    "signup",
+    "profile",
+    "appearance",
+    "locales"
+  ]
+}

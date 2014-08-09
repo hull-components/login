@@ -1,20 +1,55 @@
 {
   "name": "login",
-  "version": "bc0af89ee1c1d902cf5c265821dea1555b7fc476",
+  "version": "83bb1f65c1f949d060342be7d58ca99986642a0b",
   "files": {
     "templates": [
       "profile-form.hbs",
+      "profile.hbs",
       "recover-password.hbs",
       "sign-in.hbs",
       "sign-up.hbs",
-      "styles.hbs",
-      "thank-you.hbs"
+      "styles.hbs"
     ],
-    "stylesheets": [],
+    "stylesheets": [
+      "vex-theme-default.css",
+      "vex-theme-plain.css",
+      "vex.css"
+    ],
     "javascripts": [
       "i18n.js",
-      "main.js"
+      "main.js",
+      "vex.combined.min.js"
     ]
   },
-  "buildDate": "2014-08-06T11:42:54.715Z"
+  "buildDate": "2014-08-09T08:47:03.851Z",
+  "translations": [
+    "Already have an account?",
+    "Back to login",
+    "By signing up you agree to our",
+    "Don't have an account?",
+    "Edit my profile",
+    "Email",
+    "Email or Username",
+    "Forgot your password?",
+    "I will complete it later",
+    "Link",
+    "Log in",
+    "Log in with",
+    "Log out",
+    "Password",
+    "Please fill out your profile",
+    "Privacy Policy",
+    "Recover password",
+    "Save my profile",
+    "Sign up",
+    "Sign up with",
+    "Terms of Service",
+    "Unlink",
+    "accept_marketing_question",
+    "and",
+    "or",
+    "signin_title",
+    "signup_title",
+    "thank_you_title"
+  ]
 }

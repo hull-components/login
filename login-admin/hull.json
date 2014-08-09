@@ -1,0 +1,16 @@
+{
+  "name": "login-admin",
+  "version": "83bb1f65c1f949d060342be7d58ca99986642a0b",
+  "files": {
+    "templates": [
+      "main.hbs"
+    ],
+    "stylesheets": [],
+    "javascripts": [
+      "jsoneditor.js",
+      "main.js"
+    ]
+  },
+  "buildDate": "2014-08-09T08:47:02.503Z",
+  "translations": []
+}
