@@ -24,15 +24,15 @@
     };
 
     console.warn("HullConfig", HullConfig);
-    Hull.init(HullConfig);
+    Hull.init(HullConfig, function() {
+      window.addEventListener('message', function(e) {
+        var message = e.data;
+        if (message && message.event === 'ship.update') {
+          Hull.emit('ship.update', message.ship);
+        }
+      }, false);
+    });
 
-    window.addEventListener('message', function(e) {
-      var message = e.data;
-      if (message && message.event === 'ship.update') {
-        console.warn("Ship update", message);
-        Hull.emit('ship.update', message.ship);
-      }
-    }, false);
   </script>
 </head>
 <body>
