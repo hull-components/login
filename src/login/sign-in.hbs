@@ -1,8 +1,8 @@
 {{> login/styles}}
 
 <div class="login-header">
-  {{#if ship.appearance.logo_url}}
-    <img class="brand-logo" src="{{ship.appearance.logo_url}}" alt="Logo" />
+  {{#if settings.logo_url}}
+    <img class="brand-logo" src="{{settings.logo_url}}" alt="Logo" />
   {{/if}}
   <h1 class="login-header-title">{{t 'signin_title'}}</h1>
   <p class="login-header-subtitle">
@@ -13,11 +13,11 @@
 
 <div class="alert-message"></div>
 
-{{#if ship.social.enabled}}
+{{#if ship.config.social.enabled}}
 <div class="social-login">
   {{#each authServices}}
   <button data-hull-action="login" data-hull-provider="{{@key}}" class="btn btn-block social-btn social-btn-{{@key}}">
-    {{#if ../ship.appearance.show_social_icons}}<i class="fa fa-{{@key}}"></i>{{/if}}
+    {{#if ../settings.show_social_icons}}<i class="fa fa-{{@key}}"></i>{{/if}}
     &nbsp;
     {{t "Log in with"}} {{humanize @key}}
   </button>

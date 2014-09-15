@@ -10,27 +10,22 @@ Hull.component(function() {
     require: ['i18n'],
 
     datasources: {
-      ship: function() {
-        return this.ship || $.getJSON('ship.json');
-      },
       validationStatus: function() {
         return this.loggedIn() && this.api('me/validation_status');
       }
     },
 
     initialize: function() {
-      if (this.options.editMode) {
-        this.sandbox.on('ship.update', function(ship) {
-          this.ship = ship;
-          this.renderSection();
-        }, this);
-      }
+      this.sandbox.on('ship.update', function(ship) {
+        this.sandbox.ship.update(ship);
+        this.renderSection();
+      }, this);
       this.$el.attr('id', this.cid);
       I18n.fallbacks = true;
       I18n.locale = this.options.locale || navigator.language;
       var self = this;
       this.sandbox.on('hull.auth.login', function() {
-        if (self.ship.profile.enabled) {
+        if (self.sandbox.ship.settings('profile_enabled', true)) {
           self.renderSection('profile-form');
         } else {
           Hull.dialog && Hull.dialog.close && Hull.dialog.close();
@@ -49,6 +44,9 @@ Hull.component(function() {
       if (this.loggedIn()) {
         this.template = "profile";
       }
+
+
+      this.helpers.settings = _.bind(this.helpers.settings, this);
     },
 
     events: {
@@ -202,17 +200,21 @@ Hull.component(function() {
     helpers: {
       t: function(key, opts) {
         return I18n.t(key, opts);
+      },
+      settings: function(key, fallback) {
+        this.sandbox.ship.settings(key, fallback);
       }
     },
 
     getForm: function(formName, user) {
       var self = this,
-        _ = this.sandbox.util._;
-      if (!this.ship[formName] || !this.ship[formName].form) {
+        _ = this.sandbox.util._,
+        form = !this.sandbox.ship.resource(formName);
+      if (form) {
         return {};
       };
       if (user) {
-        var form = _.map(this.ship[formName].form, function(field) {
+        var form = _.map(form, function(field) {
           var f = _.clone(field);
           var k = f.name;
           if (user[k]) {
@@ -230,10 +232,9 @@ Hull.component(function() {
       var self = this,
         _ = this.sandbox.util._;
       data.currentEmail = this.currentEmail;
-      this.ship = data.ship;
       data.styleNamespace = "#" + this.cid;
-      I18n.translations = data.ship.locales;
-      var authServices = _.intersection(this.authServices(), data.ship.social.providers);
+      I18n.translations = this.sandbox.ship.translations();
+      var authServices = this.authServices();
       data.authServices = {};
       var loggedIn = this.loggedIn();
       _.map(authServices, function(provider) {
@@ -244,6 +245,7 @@ Hull.component(function() {
       data.me = Hull.currentUser();
       data.profileFormFields = this.getForm('profile', data.me);
       data.signupFormFields = this.getForm('signup', data.me);
+      data.settings = this.sandbox.ship.settings();
     },
 
     afterRender: function() {

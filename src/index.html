@@ -5,47 +5,37 @@
   <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
   <script src="{{config.init.jsUrl}}/{{config.version}}/hull.js"></script>
   <script>
-	  Hull.init({{{initConfig}}});
-    $(function() {
-      var preview = document.getElementById('preview').contentWindow;
-      Hull.on('ship.update', function(ship) {
-        console.warn("Updating ship !", ship);
-        preview.postMessage({ event: 'ship.update', ship: ship }, '*');
-      });
-    })
-	</script>
-  <style>
-  #preview-container {
-    box-shadow: #d4d4d4 -1px 0 0,rgba(0,0,0,0.05) 1px 0 2px inset;
-    background-image: url('http://hull.io/images/try/ps_neutral.png');
-  }
+    function getParameterByName(name) {
+      name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
+      var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
+          results = regex.exec(location.search);
+      return results == null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
+    }
 
-  #preview {
-    width: 100%;
-    height: 100%;
-  }
+    var DefaultConfig = {{{initConfig}}};
 
-  .pane-container {
-    overflow-x: hidden;
-    overflow-y: scroll;
-    height: 100%;
-    padding: 0px;
-  }
+    var HullConfig = {
+      orgUrl: getParameterByName('orgUrl')  || DefaultConfig.orgUrl,
+      appId: getParameterByName('appId')  || DefaultConfig.appId,
+      jsUrl: "http://js.hull.dev/dist",
+      sources: {
+        default: document.location.origin
+      }
+    };
 
-  .navbar-branded { padding: 10px; }
-  </style>
+    console.warn("HullConfig", HullConfig);
+    Hull.init(HullConfig);
+
+    window.addEventListener('message', function(e) {
+      var message = e.data;
+      if (message && message.event === 'ship.update') {
+        console.warn("Ship update", message);
+        Hull.emit('ship.update', message.ship);
+      }
+    }, false);
+  </script>
 </head>
 <body>
-  <div class="container-fluid">
-    <div class="row">
-      <div class="col-md-6 pane-container" id="admin-container">
-        <div data-hull-component="login-admin"></div>
-      </div>
-      <div class="col-md-6 pane-container" id='preview-container'>
-        <iframe src="./preview.html" frameborder="0" id="preview"></iframe>
-      </div>
-    </div>
-  </div>
-
+  <div data-hull-component="login"></div>
 </body>
 </html>
