@@ -37,5 +37,8 @@ settings:
       - "unchecked"
       - "hidden"
     default: "checked"
+resources:
+  - name: "profile-form"
+    type: "form"
 locales:
   - en

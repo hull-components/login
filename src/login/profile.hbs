@@ -8,7 +8,6 @@
   </p>
 </div>
 
-{{#if ship.config.social.enabled}}
 <div class="social-login">
   {{#each authServices}}
   {{#if linked}}
@@ -26,8 +25,16 @@
   {{/if}}
   {{/each}}
 </div>
-{{/if}}
 
+
+<table class="table" style="width:100%">
+  {{#each profileFormFields}}
+  <tr>
+    <th>{{title}}</th>
+    <td>{{fallback value "-"}}</td>
+  </tr>
+  {{/each}}
+</table>
 
 <div class="login-footer text-center">
  <a href="#" data-hull-action="logout">{{t "Log out"}}</a>

@@ -26,25 +26,38 @@ Hull.component(function() {
       var self = this;
       this.sandbox.on('hull.auth.login', function() {
         if (self.sandbox.ship.settings('profile_enabled', true)) {
-          self.renderSection('profile-form');
+          if (self.isProfileComplete()) {
+            self.renderSection('profile');
+          } else {
+            self.renderSection('profile-form');
+          }
         } else {
           Hull.dialog && Hull.dialog.close && Hull.dialog.close();
         }
       });
+
       this.sandbox.on('hull.auth.fail', function(error) {
         self.alertMessage(error.message || error.reason);
       });
+
       this.sandbox.on('hull.auth.logout', function(error) {
         self.renderSection('sign-up');
+        self.profileForm = $.extend(true, {}, self.sandbox.ship.resource('profile-form'));
       });
       var _ = this.sandbox.util._;
       if (this.options.section && _.include(this.templates, this.options.section)) {
         this.template = this.options.section;
       }
+      this.profileForm = $.extend(true, {}, this.sandbox.ship.resource('profile-form'));
       if (this.loggedIn()) {
-        this.template = "profile";
-      }
+        debugger
+        if (this.isProfileComplete()) {
+          this.template = "profile";
+        } else {
+          this.template = "profile-form";
+        }
 
+      }
 
       this.helpers.settings = _.bind(this.helpers.settings, this);
     },
@@ -83,11 +96,27 @@ Hull.component(function() {
 
       'submit form[data-action="profile"]': function(e) {
         e.preventDefault();
+        var _ = this.sandbox.util._;
         var self = this;
+        var formResource = this.profileForm;
         var formData = this.sandbox.dom.getFormData(e.target);
-        this.updateCurrentUser(formData).then(function() {
+        this.disableForm();
+        var data = {};
+        _.map(formResource.fields_list, function(field) {
+          var val = formData[field.name];
+          if (field.type === 'number') {
+            val = parseFloat(val);
+          } else if (field.type === 'integer') {
+            val = parseInt(val, 10);
+          }
+          data[field.name] = val;
+        });
+        var ret = this.api.put(formResource.id + "/submit", { data: data });
+        ret.then(function(response) {
+          self.profileForm.user_data = response.data;
           self.renderSection('profile');
         }, function(err) {
+          self.enableForm();
           self.alertMessage(err.message);
         });
       },
@@ -169,34 +198,6 @@ Hull.component(function() {
       this.$('form fieldset').attr('disabled', false);
     },
 
-
-    updateCurrentUser: function(attributes) {
-      var self = this,
-        _ = this.sandbox.util._;
-      if (this.loggedIn()) {
-        var user = {
-          extra: {}
-        };
-        _.map(attributes, function(v, k) {
-          if (isTopLevelField(k)) {
-            user[k] = v;
-          } else {
-            user.extra[k] = v;
-          }
-        });
-        this.disableForm();
-        var dfd = this.api.put('me', user);
-        dfd.then(function() {
-          self.enableForm();
-        }, function() {
-          self.enableForm();
-        })
-        return dfd;
-      } else {
-        return false;
-      }
-    },
-
     helpers: {
       t: function(key, opts) {
         return I18n.t(key, opts);
@@ -206,26 +207,42 @@ Hull.component(function() {
       }
     },
 
-    getForm: function(formName, user) {
-      var self = this,
-        _ = this.sandbox.util._,
-        form = !this.sandbox.ship.resource(formName);
-      if (form) {
-        return {};
-      };
-      if (user) {
-        var form = _.map(form, function(field) {
-          var f = _.clone(field);
-          var k = f.name;
-          if (user[k]) {
-            f.value = user[k];
-          } else if (user.extra && user.extra[k]) {
-            f.value = user.extra[k];
+    isProfileComplete: function() {
+      var _ = this.sandbox.util._;
+      return _.every(this.getFormFields(), function(f) {
+        return !!f.value;
+      });
+    },
+
+    getFormFields: function(formName) {
+      var _ = this.sandbox.util._;
+      var form = this.profileForm;
+      var fields = {};
+      if (!form || !form.fields_list) return fields;
+      var user_data = form.user_data || {};
+      var user = Hull.currentUser() || { extra: {}, profile: {} };
+      _.map(form.fields_list, function(field) {
+        var val = user_data[field.name];
+        var inputType;
+        if (field.type === 'string') {
+          inputType = field.format || 'text';
+        } else {
+          // inputType = field.type;
+          inputType = 'text';
+        }
+        if (!val) {
+          if (field.scope === 'app') {
+            val = user.profile[field.name];
+          } else {
+            val = user[field.name] || user.extra[field.name];
           }
-          return f;
+        }
+        fields[field.name] = _.extend({}, field, {
+          value: val,
+          inputType: inputType
         });
-      }
-      return form;
+      });
+      return fields;
     },
 
     beforeRender: function(data) {
@@ -243,8 +260,7 @@ Hull.component(function() {
         };
       });
       data.me = Hull.currentUser();
-      data.profileFormFields = this.getForm('profile', data.me);
-      data.signupFormFields = this.getForm('signup', data.me);
+      data.profileFormFields = this.getFormFields('profile-form');
       data.settings = this.sandbox.ship.settings();
     },
 
