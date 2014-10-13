@@ -1,35 +1,36 @@
 Hull.component(function() {
-  var topLevelFields = ['email', 'picture', 'name', 'login', 'password'];
 
-  function isTopLevelField(k) {
-    return topLevelFields.indexOf(k) > -1;
-  };
+  function isValidEmail(str) {
+    return /^\S+@\S+\.\S+$/i.test(str);
+  }
 
   return {
     templates: ['sign-up', 'sign-in', 'profile-form', 'profile', 'recover-password', 'styles'],
     require: ['i18n'],
 
     datasources: {
-      validationStatus: function() {
-        return this.loggedIn() && this.api('me/validation_status');
+      ship: function() {
+        return this.ship || this.api(this.options.shipId || 'app');
       }
     },
 
     initialize: function() {
       this.sandbox.on('ship.update', function(ship) {
-        this.sandbox.ship.update(ship);
+        this.ship = ship;
         this.renderSection();
       }, this);
+
       this.$el.attr('id', this.cid);
       I18n.fallbacks = true;
       I18n.locale = this.options.locale || navigator.language;
       var self = this;
+
       this.sandbox.on('hull.auth.login', function() {
-        if (self.sandbox.ship.settings('profile_enabled', true)) {
+        if (self.getSettings('profile_enabled', true)) {
           if (self.isProfileComplete()) {
-            self.renderSection('profile');
+            self.renderSection('profile', true);
           } else {
-            self.renderSection('profile-form');
+            self.renderSection('profile-form', true);
           }
         } else {
           Hull.dialog && Hull.dialog.close && Hull.dialog.close();
@@ -42,21 +43,21 @@ Hull.component(function() {
 
       this.sandbox.on('hull.auth.logout', function(error) {
         self.renderSection('sign-up');
-        self.profileForm = $.extend(true, {}, self.sandbox.ship.resource('profile-form'));
+        self.profileForm = $.extend(true, {}, self.ship.resource['profile-form']);
       });
+
       var _ = this.sandbox.util._;
       if (this.options.section && _.include(this.templates, this.options.section)) {
         this.template = this.options.section;
       }
-      this.profileForm = $.extend(true, {}, this.sandbox.ship.resource('profile-form'));
+
+      // this.profileForm = $.extend(true, {}, this.ship.resource['profile-form']);
       if (this.loggedIn()) {
-        debugger
         if (this.isProfileComplete()) {
           this.template = "profile";
         } else {
           this.template = "profile-form";
         }
-
       }
 
       this.helpers.settings = _.bind(this.helpers.settings, this);
@@ -66,7 +67,7 @@ Hull.component(function() {
 
       'keyup input[name="email"],input[name="login"]': function(e) {
         var val = $(e.target).val();
-        if (this.isValidEmail(val)) {
+        if (isValidEmail(val)) {
           this.currentEmail = val;
         }
       },
@@ -87,7 +88,7 @@ Hull.component(function() {
         var self = this,
           formData = this.sandbox.dom.getFormData(e.target);
         var email = formData.email;
-        if (this.isValidEmail(email)) {
+        if (isValidEmail(email)) {
           this.requestEmail(email, 'request_password_reset').then(function() {
             self.renderSection('sign-in');
           });
@@ -98,7 +99,7 @@ Hull.component(function() {
         e.preventDefault();
         var _ = this.sandbox.util._;
         var self = this;
-        var formResource = this.profileForm;
+        var formResource = this.ship.resources['profile-form'];
         var formData = this.sandbox.dom.getFormData(e.target);
         this.disableForm();
         var data = {};
@@ -111,9 +112,10 @@ Hull.component(function() {
           }
           data[field.name] = val;
         });
+
         var ret = this.api.put(formResource.id + "/submit", { data: data });
         ret.then(function(response) {
-          self.profileForm.user_data = response.data;
+          self.ship.resources['profile-form'] = response;
           self.renderSection('profile');
         }, function(err) {
           self.enableForm();
@@ -126,7 +128,7 @@ Hull.component(function() {
         var self = this;
         this.alertMessage(false);
         var loginData = this.sandbox.dom.getFormData(e.target);
-        if (this.isValidEmail(loginData.login)) {
+        if (isValidEmail(loginData.login)) {
           this.currentEmail = loginData.login;
         }
         if (loginData.login && loginData.password) {
@@ -156,21 +158,21 @@ Hull.component(function() {
 
     requestEmail: function(email, type) {
       var self = this;
-      if (this.isValidEmail(email)) {
+      if (isValidEmail(email)) {
         var dfd = this.api('users/' + type, 'post', {
           email: email
         })
         dfd.then(function(res) {
-          self.alertMessage("Email envoyé à " + email + ".");
+          self.alertMessage("Email sent to '" + email + "'.");
         }, function(err) {
           if (err.status == 429 && err.retry_after) {
             var minutes = Math.round(err.retry_after / 60);
-            self.alertMessage("Un email a déjà été envoyé à " + email);
+            self.alertMessage("An email has already beed sent to '" + email + "'.");
           }
         });
         return dfd;
       } else {
-        this.alertMessage("L'email rensigné n'est pas valide: " + email);
+        this.alertMessage("Invalid email address '" + email + "'.");
       }
     },
 
@@ -185,8 +187,9 @@ Hull.component(function() {
       }
     },
 
-    renderSection: function(section) {
+    renderSection: function(section, refreshShip) {
       this.currentSection = section || this.currentSection || this.getTemplate();
+      if (refreshShip) this.ship = undefined;
       this.render(this.currentSection);
     },
 
@@ -203,54 +206,39 @@ Hull.component(function() {
         return I18n.t(key, opts);
       },
       settings: function(key, fallback) {
-        this.sandbox.ship.settings(key, fallback);
+        this.getSettings(key, fallback);
+      }
+    },
+
+    getSettings: function(key, fallback) {
+      var s = this.ship.settings || {};
+      if (key) {
+        return s[key] || fallback;
+      } else {
+        return s;
       }
     },
 
     isProfileComplete: function() {
       var _ = this.sandbox.util._;
-      return _.every(this.getFormFields(), function(f) {
+      return this.loggedIn() && _.every(this.getFormFields(), function(f) {
         return !!f.value;
       });
     },
 
-    getFormFields: function(formName) {
-      var _ = this.sandbox.util._;
-      var form = this.profileForm;
-      var fields = {};
-      if (!form || !form.fields_list) return fields;
-      var user_data = form.user_data || {};
-      var user = Hull.currentUser() || { extra: {}, profile: {} };
-      _.map(form.fields_list, function(field) {
-        var val = user_data[field.name];
-        var inputType;
-        if (field.type === 'string') {
-          inputType = field.format || 'text';
-        } else {
-          // inputType = field.type;
-          inputType = 'text';
-        }
-        if (!val) {
-          if (field.scope === 'app') {
-            val = user.profile[field.name];
-          } else {
-            val = user[field.name] || user.extra[field.name];
-          }
-        }
-        fields[field.name] = _.extend({}, field, {
-          value: val,
-          inputType: inputType
-        });
-      });
+    getFormFields: function() {
+      var fields = this.ship && this.ship.resources['profile-form'].fields_list;
       return fields;
     },
 
     beforeRender: function(data) {
+      this.ship = data.ship;
+      console.warn("SHIP !!!", data.ship);
       var self = this,
         _ = this.sandbox.util._;
       data.currentEmail = this.currentEmail;
       data.styleNamespace = "#" + this.cid;
-      I18n.translations = this.sandbox.ship.translations();
+      I18n.translations = this.ship.translations;
       var authServices = this.authServices();
       data.authServices = {};
       var loggedIn = this.loggedIn();
@@ -260,8 +248,9 @@ Hull.component(function() {
         };
       });
       data.me = Hull.currentUser();
-      data.profileFormFields = this.getFormFields('profile-form');
-      data.settings = this.sandbox.ship.settings();
+      this.profileForm = this.ship.resources['profile-form'];
+      data.profileFormFields = this.getFormFields();
+      data.settings = this.getSettings();
     },
 
     afterRender: function() {

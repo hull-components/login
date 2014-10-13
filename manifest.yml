@@ -8,7 +8,9 @@ settings:
   - name: "logo_url"
     title: "Logo URL"
     type: "string"
-    format: "uri"
+    format: "url"
+    options:
+      image: true
     default: "https://d21oh8fj97neu1.cloudfront.net/1iljptgj/view.png"
   - name: "main_color"
     title: "Main Color"

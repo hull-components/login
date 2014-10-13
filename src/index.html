@@ -17,13 +17,11 @@
     var HullConfig = {
       orgUrl: getParameterByName('orgUrl')  || DefaultConfig.orgUrl,
       appId: getParameterByName('appId')  || DefaultConfig.appId,
-      jsUrl: "http://js.hull.dev/dist",
       sources: {
         default: document.location.origin
       }
     };
 
-    console.warn("HullConfig", HullConfig);
     Hull.init(HullConfig, function() {
       window.addEventListener('message', function(e) {
         var message = e.data;
@@ -34,8 +32,25 @@
     });
 
   </script>
+
+  <style>
+  body {
+    background-image: url('http://hull.io/images/try/ps_neutral.png');
+  }
+  .container {
+    width: 450px;
+    margin: 20px auto;
+  }
+  [data-hull-component="login"] {
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+  }
+  </style>
 </head>
 <body>
-  <div data-hull-component="login"></div>
+  <div class="container">
+    <div data-hull-component="login"></div>
+  </div>
 </body>
 </html>
