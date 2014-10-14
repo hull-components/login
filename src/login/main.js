@@ -233,7 +233,6 @@ Hull.component(function() {
 
     beforeRender: function(data) {
       this.ship = data.ship;
-      console.warn("SHIP !!!", data.ship);
       var self = this,
         _ = this.sandbox.util._;
       data.currentEmail = this.currentEmail;
